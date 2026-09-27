@@ -1,0 +1,103 @@
+/* cursor.css — Venom/Spider Cursor · Space Edition */
+
+/* ── Default: system cursor ── */
+body.system-cursor,
+body.system-cursor *,
+body.system-cursor a,
+body.system-cursor button,
+body.system-cursor input,
+body.system-cursor textarea,
+body.system-cursor select,
+body.system-cursor label,
+body.system-cursor [role="button"],
+body.system-cursor [onclick],
+body.system-cursor .clickable {
+    cursor: auto !important;
+}
+
+/* ── Custom cursor: hide native cursor everywhere ── */
+body:not(.system-cursor),
+body:not(.system-cursor) * {
+    cursor: none !important;
+}
+
+/* Flowise toggle button is exposed via part="button" — pierce shadow DOM */
+body:not(.system-cursor) flowise-chatbot::part(button) {
+    cursor: none !important;
+}
+
+/* ── Canvas overlay ── */
+#venom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2147483647;
+    display: none;
+}
+
+body:not(.system-cursor) #venom-cursor {
+    display: block;
+}
+
+body.system-cursor #venom-cursor {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ── Touch devices: revert ── */
+@media (pointer: coarse) {
+    body, html, a, button, input, textarea, select {
+        cursor: auto !important;
+    }
+    #venom-cursor {
+        display: none !important;
+    }
+}
+
+/* ── Cursor toggle button ── */
+#cursorToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.70);
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    cursor: auto;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    padding: 0;
+    overflow: hidden;
+}
+
+#cursorToggle:hover {
+    border-color: rgba(255,255,255,0.40);
+    background: rgba(255,255,255,0.05);
+}
+
+#cursorToggle.active {
+    border-color: rgba(255,102,0,0.45);
+    background: rgba(255,102,0,0.06);
+    box-shadow: 0 0 8px rgba(255,102,0,0.12);
+}
+
+#cursorToggle .cursor-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+    filter: brightness(0) invert(1);
+    opacity: 0.65;
+    transition: opacity 0.2s;
+}
+
+#cursorToggle:hover .cursor-icon,
+#cursorToggle.active .cursor-icon {
+    opacity: 0.95;
+}
+

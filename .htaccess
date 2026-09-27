@@ -1,0 +1,51 @@
+# ExampleFeed — Apache Configuration
+
+# Security: disable directory listing
+Options -Indexes
+
+# Flowise chat proxy
+RewriteEngine On
+RewriteRule ^api/v1/prediction/(.*)$ scripts/add/flowise-proxy.php?path=$1 [L,QSA]
+
+# HTTPS redirect (enable in production)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# GZIP compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml font/ttf font/woff font/woff2
+</IfModule>
+
+# Browser caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                  "access plus 1 month"
+    ExpiresByType application/javascript    "access plus 1 month"
+    ExpiresByType image/png                 "access plus 1 month"
+    ExpiresByType image/jpeg                "access plus 1 month"
+    ExpiresByType image/svg+xml             "access plus 1 month"
+    ExpiresByType font/ttf                  "access plus 1 month"
+    ExpiresByType font/woff2                "access plus 1 month"
+    ExpiresByType text/html                 "access plus 1 hour"
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # X-Frame-Options set per-page where needed
+</IfModule>
+
+# Protect config file
+<Files "config.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect data directory
+<FilesMatch "\.json$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
